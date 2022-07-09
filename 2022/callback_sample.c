@@ -23,3 +23,15 @@ static void * actor_main(void * arg)
 	return NULL;
 }
 
+int main()
+{
+	//request_actionはすぐ終了して後でnotify_eventが呼ばれる。
+	request_action(notify_event);	
+	printf("API request_action is called! Let's wait result!\n"9;
+
+	//sleep中に要求を受ける側が処理を終えてコールバックを呼ぶ。
+	sleep(3);
+	printf("Exit!\n");
+
+	return 0;
+}
