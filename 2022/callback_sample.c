@@ -23,6 +23,20 @@ static void * actor_main(void * arg)
 	return NULL;
 }
 
+static void request_action(notify_event_cb event)
+{
+	pthread_t pid;
+
+	pthread_create(&pid, NULL, actor_main, event);
+	pthread_detach(pid);
+}
+
+/* 応答で呼ばれるコールバックの中身 */
+static void notify_event(const char *result)
+{
+	printf("Receive result![%s]\n", result);
+}
+
 int main()
 {
 	//request_actionはすぐ終了して後でnotify_eventが呼ばれる。
