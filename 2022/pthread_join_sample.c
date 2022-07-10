@@ -13,6 +13,7 @@ void* func(void* ptr)
 		printf("%s=%d\n", str, i);
 	}
 
+	//auto変数はアドレスが危険なため、mallocでメモリ割り当て
 	ret = malloc(sizeof(int));
 	if (0 == strcmp(str, "A")) {
 		*(int*)ret = 0;
@@ -20,6 +21,8 @@ void* func(void* ptr)
 		*(int*)ret = 999;
 	}
 
+	//スレッドで呼び出される関数の中でreturnすると、
+	//その値がpthread_joinの第二引数に格納されて戻る
 	return ret;
 }
 
@@ -37,6 +40,7 @@ int main()
 	printf("thread1:%d\n", *(int*)ret1);
 	printf("thread2:%d\n", *(int*)ret2);
 
+	//受け取った側はfreeする必要がある
 	free(ret1);
 	free(ret2);
 
