@@ -3,6 +3,26 @@
 #include <string.h>
 #include <pthread.h>
 
+void* func(void* ptr)
+{
+	int i = 0;
+	char* str = (char*)ptr;
+	void* ret;
+
+	for (i=1; i<=5; i++) {
+		printf("%s=%d\n", str, i);
+	}
+
+	ret = malloc(sizeof(int));
+	if (0 == strcmp(str, "A")) {
+		*(int*)ret = 0;
+	} else {
+		*(int*)ret = 999;
+	}
+
+	return ret;
+}
+
 int main()
 {
 	void *ret1, *ret2;
