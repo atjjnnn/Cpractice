@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <unistd.h>
+#include <pthread.h>
 #include "radio.h"
 
 typedef enum
@@ -23,12 +25,29 @@ void OnTxTimeout(void);
 
 void OnRxTimeout(void);
 
+void *thread_task_1(RadioEvents_t *Events)
+{
+	sleep(1);
+	Events->TxDone();
+}
+
+void *thread_task_2(RadioEvents_t *Events)
+{
+        sleep(10);
+        Events->RxTimeout();
+}
+
 int main(void)
 {
+	pthread_t pid;	
+
 	RadioEvents.TxDone = OnTxDone;
 	RadioEvents.RxDone = OnRxDone;
 	RadioEvents.TxTimeout = OnTxTimeout;
 	RadioEvents.RxTimeout = OnRxTimeout;
+
+	pthread_create(&pid, NULL, thread_task_1, &RadioEvents);
+        pthread_create(&pid, NULL, thread_task_2, &RadioEvents);
 
 	while(1)
 	{
